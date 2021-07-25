@@ -1,0 +1,92 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+void merge(int arr[], int const left, int const mid, int const right)
+{
+    int const subArrayOne = mid - left + 1;
+    int const subArrayTwo = right - mid;
+
+    int *leftArray = new int[subArrayOne];
+    int *rightArray = new int[subArrayTwo];
+
+    for(int i = 0; i < subArrayOne; i++)
+    { leftArray[i] = arr[left + i]; }
+
+    for(int j = 0; j < subArrayTwo; j++)
+    { rightArray[j] = arr[mid + j + 1]; }
+
+    int indexSubArrayOne = 0,
+        indexSubArrayTwo = 0;
+    int indexMergedArray = left;
+
+    while(indexSubArrayOne < subArrayOne && indexSubArrayTwo < subArrayTwo)
+    {
+        if(leftArray[indexSubArrayOne] <= rightArray[indexSubArrayTwo])
+        {
+            arr[indexMergedArray] = leftArray[indexSubArrayOne];
+            indexSubArrayOne++;
+        }
+        else
+        {
+            arr[indexMergedArray] = rightArray[indexSubArrayTwo];
+            indexSubArrayTwo++;
+        }
+        indexMergedArray++;
+    }
+
+    while(indexSubArrayOne < subArrayOne)
+    {
+        arr[indexMergedArray] = leftArray[indexSubArrayOne];
+        indexSubArrayOne++, indexMergedArray++;
+    }
+
+    while(indexSubArrayTwo < subArrayTwo)
+    {
+        arr[indexMergedArray] = rightArray[indexSubArrayTwo];
+        indexSubArrayTwo++, indexMergedArray++;
+    }
+}
+
+void mergeSort(int arr[], int const low, int const high)
+{
+    if(low >= high)
+        return;
+    
+    int mid = low + (high - low) / 2;
+    mergeSort(arr, low, mid);
+    mergeSort(arr, mid + 1, high);
+    merge(arr, low, mid, high);
+}
+
+void printArray(int arr[], int size)
+{
+    for(auto i = 0; i < size; i++)
+    {
+        cout << arr[i] << " ";
+    }
+}
+
+int main()
+{
+    int size, arr[101];
+
+    cout << "Input:"; 
+    cin >> size;
+    
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+
+    for(int i = 0; i < size; i++)
+    {
+        cin >> arr[i];
+    }
+
+    mergeSort(arr, 0, size - 1);
+
+    cout << "Array after merge sort:\n";
+    printArray(arr, size);
+    
+    return 0;
+}
